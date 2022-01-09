@@ -9,16 +9,53 @@
         <title>Weather Dashboard</title>
     </head>
 
+    <header class = "bg-primary text-center">
+        <h1 class = "text-white">Weather Dashboard</h1>
+    </header>
+    
     <body>
+        <!-- Container For Whole Page -->
+    <main class = "container-fluid no-gutters row">
+            
+            <!-- Container For Form / Search History -->
+        <div class = "col-md-3 ml-4 mt-4">               
+            <div>
+                <h3>Search for a city:</h3>
+                <form class="form-inline">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button id = "searchBtn" class="btn btn-outline-primary my-2 my-sm-0" type="button">Search</button>
+                </form>
 
+            </div>
+                
+                <!-- Search History -->
+            <div id = "search-history">
+
+            </div>
+            
+        </div>
+
+            <!-- Container For Today's Weather -->
+        <div class = "col-md-8 border border-secondary">
+                <div id = "todays-forcast" class = "row">
+        
+                </div>
+           
+                <!--Container for 5 day forcast  -->
+                <div id = "five-day-forcast" class = mt-1>
+                </div>
+
+        </div>
+        
+    </main>
 
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
-        <script src="assets/script/script.js"></script>
+        <script src="./assets/js/script.js"></script>
+
     </body>
 
 
-    <footer>
-    </footer> 
+    
 </html>
 
