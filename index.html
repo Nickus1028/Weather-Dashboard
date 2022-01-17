@@ -27,28 +27,33 @@
 
             </div>
                 
-                <!-- Search History -->
-            <div id = "search-history">
-
+            <!-- Search history section -->
+            <div id="search-history" class="mt-3">
+                <!-- Add search history buttons-->
             </div>
+
+            <!---end column-->
+           </div> 
+
+        <!--- Current City Container -->
+        <div class="col-md-9 mt-2">
+            <div class="row">
+                <div id="todays-forcast">
+                    <!-- Display current weather data here -->
+                </div>
+            </div>
+
             
-        </div>
-
-            <!-- Container For Today's Weather -->
-        <div class = "col-md-8 border border-secondary">
-                <div id = "todays-forcast" class = "row">
-        
-                </div>
-           
-                <!--Container for 5 day forcast  -->
-                <div id = "five-day-forcast" class = mt-1>
-                </div>
-
+            <!--- 5-day forecast container-->
+                <h3 id="five-day" class="mt-1"></h3>
+                <div id="forecast-container" class="row"></div>
+            </div> 
         </div>
         
     </main>
 
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
         <script src="./assets/js/script.js"></script>
 
     </body>

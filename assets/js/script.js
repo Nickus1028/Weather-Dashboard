@@ -62,14 +62,39 @@ var loadCityData = function(city) {
                     cityWind = data.current.wind_speed;
                     cityHumidity = data.current.humidity;
                     cityUV = data.current.uvi;
-                    
-                    
+                    displayWeather();                   
                     })
                  })
+
+                 
             })
         }
     })
+
+    
 }
 
+// Function to display current city weather
+var displayWeather = function () { 
+    var currentDate = moment().format('dddd, MMMM Do, h:mm:ss a');
+    var mainDiv = $("<div>");
+    var header = $("<h2>").text(cityName + " - " + currentDate);
+    var temp = $("<p>").text("Temp: " + cityTemp + " F");
+    var wind = $("<p>").text("Wind: " + cityWind + " MPH");
+    var humidity = $("<p>").text("Humidty: " + cityHumidity + " %");
+    
+    // Set our UV color warnings
+    var UV =  $("<p>").text("UV Index: " + cityUV);
+    if (cityUV <= 4) {
+        UV.attr("class", "bg-success text-white");
+    } else if (cityUV <= 8) {
+        UV.attr("class","bg-warning text-black");
+    } else {
+        UV.attr("class", "bg-danger text-white");
+    }
+    
+    $("#todays-forcast").append(mainDiv, header, temp, wind, humidity, UV); 
+          
+}
 
 $("#searchBtn").on("click", cityEntry)
