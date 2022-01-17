@@ -93,9 +93,9 @@ var loadCityData = function(city) {
                     cityWind = data.current.wind_speed;
                     cityHumidity = data.current.humidity;
                     cityUV = data.current.uvi;
-                    fivedayForcast.push(data.daily);
                     displayWeather(); 
-                    display5dayforcast();                  
+                    display5dayforcast(data);  
+                              
                     })
                  })
 
@@ -132,10 +132,27 @@ var displayWeather = function () {
           
 }
 
-var display5dayforcast = function () {
-    $("#fivedayHeader").text("5 Day Forcast:")
-    console.log(fivedayForcast)
+// Function to display 5 day forcast
+var display5dayforcast = function (data) {
+    $("#five-day-forcast").empty();
+    $("#fivedayHeader").text("5 Day Forcast:");
+    
+    for(i=0; i < 5; i++) {
 
+        var card = $("<div>").attr("class","card col-xl-2 col-md-5 col-sm-10 mx-3 my-2 bg-primary text-white text-center");
+        var cardBody = $("<div>").attr("class", "card-body");
+        var date = moment().add(i+1, "days").format("L")
+        var fivedate = $("<h3>").text(date);
+        var fiveicon = $("<img>").attr("src", "https://openweathermap.org/img/wn/" + data.daily[i].weather[0].icon + "@2x.png");
+        var fivetemp = $("<p>").attr("class", "card-text").text("Temp: " + data.daily[i].temp.day + " F");
+        var fivewind = $("<p>").attr("class", "card-text").text("Wind: " + data.daily[i].wind_speed + " MPH");
+        var fivehumidty = $("<p>").attr("class", "card-text").text("Humidty: " + data.daily[i].humidity + " %");
+
+        cardBody.append(fivedate, fiveicon, fivetemp, fivewind, fivehumidty);
+        card.append(cardBody)
+        $("#five-day-forcast").append(card);
+        
+    }
 }
 
 // Load our search history on page load
