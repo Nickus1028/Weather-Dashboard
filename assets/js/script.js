@@ -29,6 +29,26 @@ var saveCities = function() {
     localStorage.setItem("searchedCities", JSON.stringify(searchedCities));
 }
 
+//Function to load cities from search history
+
+var searchHistory = function() {
+    loadHistory = localStorage.getItem("searchedCities")
+    if (loadHistory == null) {
+        searchedCities = [];
+    } else {
+        loadHistory = JSON.parse(loadHistory);
+        console.log(loadHistory)
+        console.log(loadHistory.length);
+        for (i=0; i < loadHistory.length; i++) {
+            var cityBTN = $("<div>").attr("class", "card");
+            var cityTEXT = $("<button>").attr("type", "button").attr("class", "col-12 font-weight-bold bg-primary card-body searched-city").text(loadHistory[i])
+
+            $("#search-history").append(cityBTN, cityTEXT)
+
+        }
+    }
+}
+
 // First thing first grab form input
 var cityEntry = function (){
     city = $("#city-entry").val();
@@ -52,12 +72,18 @@ var loadCityData = function(city) {
                 // Save searched city to local storage
                 searchedCities.push(cityName);
                 saveCities();
-                               
+                
+                var cityBTN = $("<div>").attr("class", "card");
+                var cityTEXT = $("<button>").attr("type", "button").attr("class", "col-12 font-weight-bold bg-primary card-body searched-city").text(cityName)
+
+                $("#search-history").append(cityBTN, cityTEXT)
+                
+
                 var forecastUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityLAT + "&lon=" + cityLON + "&units=imperial&exclude=minutely,hourly&appid=" + APIkey;
                 
                 fetch(forecastUrl).then(function(response) {
                     response.json().then(function(data) {
-                    console.log(data);
+                    
                     cityTemp = data.current.temp;
                     cityWind = data.current.wind_speed;
                     cityHumidity = data.current.humidity;
@@ -76,7 +102,8 @@ var loadCityData = function(city) {
 
 // Function to display current city weather
 var displayWeather = function () { 
-    var currentDate = moment().format('dddd, MMMM Do, h:mm:ss a');
+    
+    var currentDate = moment().format("dddd, MMMM Do");
     var mainDiv = $("<div>");
     var header = $("<h2>").text(cityName + " - " + currentDate);
     var temp = $("<p>").text("Temp: " + cityTemp + " F");
@@ -96,5 +123,7 @@ var displayWeather = function () {
     $("#todays-forcast").append(mainDiv, header, temp, wind, humidity, UV); 
           
 }
+
+searchHistory();
 
 $("#searchBtn").on("click", cityEntry)
