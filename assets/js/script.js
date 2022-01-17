@@ -37,17 +37,23 @@ var searchHistory = function() {
         searchedCities = [];
     } else {
         loadHistory = JSON.parse(loadHistory);
-        console.log(loadHistory)
-        console.log(loadHistory.length);
         for (i=0; i < loadHistory.length; i++) {
             var cityBTN = $("<div>").attr("class", "card");
-            var cityTEXT = $("<button>").attr("type", "button").attr("class", "col-12 font-weight-bold bg-primary card-body searched-city").text(loadHistory[i])
+            var cityTEXT = $("<button>").attr("type", "button").attr("value", loadHistory[i]).attr("class", "col-12 font-weight-bold bg-primary card-body searched-city").text(loadHistory[i])
 
             $("#search-history").append(cityBTN, cityTEXT)
 
         }
     }
 }
+
+// Function to live update city when search is clicked
+var updateCity = function() {
+    
+    city = $(this).val();
+    loadCityData(city);
+}
+
 
 // First thing first grab form input
 var cityEntry = function (){
@@ -57,7 +63,7 @@ var cityEntry = function (){
 
 // API call with city variable and API key. WORKS
 var loadCityData = function(city) {
-    
+    $("#todays-forcast").empty();
     var CityURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + APIkey;
     
     fetch(CityURL).then(function(response){
@@ -73,8 +79,9 @@ var loadCityData = function(city) {
                 searchedCities.push(cityName);
                 saveCities();
                 
+                // Add our city to our search history live
                 var cityBTN = $("<div>").attr("class", "card");
-                var cityTEXT = $("<button>").attr("type", "button").attr("class", "col-12 font-weight-bold bg-primary card-body searched-city").text(cityName)
+                var cityTEXT = $("<button>").attr("type", "button").attr("value", cityName).attr("class", "col-12 font-weight-bold bg-primary card-body searched-city").text(cityName)
 
                 $("#search-history").append(cityBTN, cityTEXT)
                 
@@ -127,3 +134,4 @@ var displayWeather = function () {
 searchHistory();
 
 $("#searchBtn").on("click", cityEntry)
+$(document).on("click", ".searched-city", updateCity)
