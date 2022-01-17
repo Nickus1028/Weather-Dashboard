@@ -10,8 +10,16 @@
 // WHEN I click on a city in the search history
 // THEN I am again presented with current and future conditions for that city
 
+//Global variables
 var searchedCities = [];
 var city = "";
+var cityName = "";
+var cityLAT = "";
+var cityLON = "";
+var cityTemp = "";
+var cityWind = "";
+var cityHumidity = "";
+var cityUV = "";
 
 // API key required to pull data
 var APIkey = "17bc0545ba51f0b005762c19fec32cf4"
@@ -27,6 +35,7 @@ var cityEntry = function (){
     loadCityData(city);
 }
 
+// API call with city variable and API key. WORKS
 var loadCityData = function(city) {
     
     var CityURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=imperial&appid=" + APIkey;
@@ -34,13 +43,33 @@ var loadCityData = function(city) {
     fetch(CityURL).then(function(response){
         if (response.ok) {
             response.json().then(function(data) {
-                console.log(data);
+                
+                // Save our city name and longitude and latitude
+                cityName = data.name;
+                cityLAT = data.coord.lat;
+                cityLON = data.coord.lon;
+                
+                // Save searched city to local storage
+                searchedCities.push(cityName);
+                saveCities();
+                               
+                var forecastUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityLAT + "&lon=" + cityLON + "&units=imperial&exclude=minutely,hourly&appid=" + APIkey;
+                
+                fetch(forecastUrl).then(function(response) {
+                    response.json().then(function(data) {
+                    console.log(data);
+                    cityTemp = data.current.temp;
+                    cityWind = data.current.wind_speed;
+                    cityHumidity = data.current.humidity;
+                    cityUV = data.current.uvi;
+                    
+                    
+                    })
+                 })
             })
         }
     })
-
 }
-
 
 
 $("#searchBtn").on("click", cityEntry)
