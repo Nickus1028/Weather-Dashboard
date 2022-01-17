@@ -88,14 +88,12 @@ var loadCityData = function(city) {
                 
                 fetch(forecastUrl).then(function(response) {
                     response.json().then(function(data) {
-                    console.log(data);
                     cityIcon = data.current.weather[0].icon;
                     cityTemp = data.current.temp;
                     cityWind = data.current.wind_speed;
                     cityHumidity = data.current.humidity;
                     cityUV = data.current.uvi;
                     fivedayForcast.push(data.daily);
-                    console.log(cityIcon);
                     displayWeather(); 
                     display5dayforcast();                  
                     })
@@ -136,6 +134,7 @@ var displayWeather = function () {
 
 var display5dayforcast = function () {
     $("#fivedayHeader").text("5 Day Forcast:")
+    console.log(fivedayForcast)
 
 }
 
