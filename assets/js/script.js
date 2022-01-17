@@ -1,6 +1,3 @@
-// Need 5 day forcast
-// Need error if city returns null
-
 //Global variables
 var city = "";
 var searchedCities = [];
