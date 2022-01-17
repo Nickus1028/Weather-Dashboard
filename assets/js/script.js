@@ -11,8 +11,8 @@
 // THEN I am again presented with current and future conditions for that city
 
 //Global variables
-var searchedCities = [];
 var city = "";
+var searchedCities = [];
 var cityName = "";
 var cityLAT = "";
 var cityLON = "";
@@ -32,14 +32,14 @@ var saveCities = function() {
 //Function to load cities from search history
 
 var searchHistory = function() {
-    loadHistory = localStorage.getItem("searchedCities")
-    if (loadHistory == null) {
+    searchedCities = localStorage.getItem("searchedCities")
+    if (searchedCities == null) {
         searchedCities = [];
     } else {
-        loadHistory = JSON.parse(loadHistory);
-        for (i=0; i < loadHistory.length; i++) {
+        searchedCities = JSON.parse(searchedCities);
+        for (i=0; i < searchedCities.length; i++) {
             var cityBTN = $("<div>").attr("class", "card");
-            var cityTEXT = $("<button>").attr("type", "button").attr("value", loadHistory[i]).attr("class", "col-12 font-weight-bold bg-primary card-body searched-city").text(loadHistory[i])
+            var cityTEXT = $("<button>").attr("type", "button").attr("value", searchedCities[i]).attr("class", "col-12 font-weight-bold bg-primary card-body searched-city").text(searchedCities[i])
 
             $("#search-history").append(cityBTN, cityTEXT)
 
@@ -49,16 +49,19 @@ var searchHistory = function() {
 
 // Function to live update city when search is clicked
 var updateCity = function() {
-    
     city = $(this).val();
     loadCityData(city);
 }
 
-
 // First thing first grab form input
 var cityEntry = function (){
     city = $("#city-entry").val();
-    loadCityData(city);
+    if (city.length == 0) {
+        alert("Must enter a city!")
+        return false;
+    } else {
+        loadCityData(city);
+    }
 }
 
 // API call with city variable and API key. WORKS
@@ -69,23 +72,25 @@ var loadCityData = function(city) {
     fetch(CityURL).then(function(response){
         if (response.ok) {
             response.json().then(function(data) {
-                
                 // Save our city name and longitude and latitude
                 cityName = data.name;
                 cityLAT = data.coord.lat;
                 cityLON = data.coord.lon;
                 
-                // Save searched city to local storage
-                searchedCities.push(cityName);
-                saveCities();
-                
-                // Add our city to our search history live
-                var cityBTN = $("<div>").attr("class", "card");
-                var cityTEXT = $("<button>").attr("type", "button").attr("value", cityName).attr("class", "col-12 font-weight-bold bg-primary card-body searched-city").text(cityName)
+                // Update local storage IF city has not been searched before
+                var prevSearch = searchedCities.includes(cityName);
+                if (!prevSearch) {
+                    searchedCities.push(cityName);
+                    saveCities();
+                    
+                    // Add our city to our search history live
+                    var cityBTN = $("<div>").attr("class", "card");
+                    var cityTEXT = $("<button>").attr("type", "button").attr("value", cityName).attr("class", "col-12 font-weight-bold bg-primary card-body searched-city").text(cityName)
 
-                $("#search-history").append(cityBTN, cityTEXT)
-                
+                    $("#search-history").append(cityBTN, cityTEXT)
 
+                }
+                
                 var forecastUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + cityLAT + "&lon=" + cityLON + "&units=imperial&exclude=minutely,hourly&appid=" + APIkey;
                 
                 fetch(forecastUrl).then(function(response) {
@@ -131,7 +136,11 @@ var displayWeather = function () {
           
 }
 
+// Load our search history on page load
 searchHistory();
 
+// Listener for our search button
 $("#searchBtn").on("click", cityEntry)
+
+// Listener for our history buttons being clicked
 $(document).on("click", ".searched-city", updateCity)
