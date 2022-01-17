@@ -1,4 +1,4 @@
-<h1>Challenge 56: Weather Dashboard <h2>
+<h1>Challenge 6: Weather Dashboard <h2>
  
  <h2>Site URL:</h2>
   https://nickus1028.github.io/Weather-Dashboard/
