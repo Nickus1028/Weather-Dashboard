@@ -7,10 +7,12 @@ var searchedCities = [];
 var cityName = "";
 var cityLAT = "";
 var cityLON = "";
+var cityIcon ="";
 var cityTemp = "";
 var cityWind = "";
 var cityHumidity = "";
 var cityUV = "";
+var fivedayForcast = [];
 
 // API key required to pull data
 var APIkey = "17bc0545ba51f0b005762c19fec32cf4"
@@ -86,12 +88,16 @@ var loadCityData = function(city) {
                 
                 fetch(forecastUrl).then(function(response) {
                     response.json().then(function(data) {
-                    
+                    console.log(data);
+                    cityIcon = data.current.weather[0].icon;
                     cityTemp = data.current.temp;
                     cityWind = data.current.wind_speed;
                     cityHumidity = data.current.humidity;
                     cityUV = data.current.uvi;
-                    displayWeather();                   
+                    fivedayForcast.push(data.daily);
+                    console.log(cityIcon);
+                    displayWeather(); 
+                    display5dayforcast();                  
                     })
                  })
 
@@ -109,6 +115,7 @@ var displayWeather = function () {
     var currentDate = moment().format("dddd, MMMM Do");
     var mainDiv = $("<div>");
     var header = $("<h2>").text(cityName + " - " + currentDate);
+    var icon = $("<img>").attr("src", "https://openweathermap.org/img/wn/" + cityIcon + "@2x.png" )
     var temp = $("<p>").text("Temp: " + cityTemp + " F");
     var wind = $("<p>").text("Wind: " + cityWind + " MPH");
     var humidity = $("<p>").text("Humidty: " + cityHumidity + " %");
@@ -123,8 +130,13 @@ var displayWeather = function () {
         UV.attr("class", "bg-danger text-white");
     }
     
-    $("#todays-forcast").append(mainDiv, header, temp, wind, humidity, UV); 
+    $("#todays-forcast").append(mainDiv, header, icon, temp, wind, humidity, UV); 
           
+}
+
+var display5dayforcast = function () {
+    $("#fivedayHeader").text("5 Day Forcast:")
+
 }
 
 // Load our search history on page load
